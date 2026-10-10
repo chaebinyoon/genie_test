@@ -1302,7 +1302,7 @@ function fullPlayerScreen() {
 
 function loginScreen() {
   return `
-    <div style="background: #fff; width: 100%; height: 100%; position: absolute; top: 0; left: 0; z-index: 100; display: flex; flex-direction: column;">
+    <div style="background: #fff; width: 100%; height: 100%; position: absolute; top: 0; left: 0; z-index: 500; display: flex; flex-direction: column;">
       <header style="display: flex; align-items: center; justify-content: center; height: 56px; position: relative; border-bottom: 1px solid transparent;">
         <button data-action="close-login" style="position: absolute; left: 16px; background: none; border: none; font-size: 24px; color: #141414; padding: 0; cursor: pointer; font-weight: 300;"><svg width=\'1em\' height=\'1em\' viewBox=\'0 0 24 24\' fill=\'currentColor\' xmlns=\'http://www.w3.org/2000/svg\'><path d=\'M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z\'/></svg></button>
         <h2 style="font-size: 18px; font-weight: 700; color: #141414; margin: 0;">로그인</h2>
@@ -1684,8 +1684,8 @@ function promptModal() {
   const dateStr = `${today.getFullYear()}.${String(today.getMonth() + 1).padStart(2, '0')}.${String(today.getDate()).padStart(2, '0')}`;
 
   return `
-    <div class="sheet-overlay" style="z-index: 100;" data-action="prompt-cancel"></div>
-    <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 280px; background: #fff; border-radius: 16px; padding: 24px; z-index: 101; box-shadow: 0 4px 20px rgba(0,0,0,0.15); display: flex; flex-direction: column; align-items: center;">
+    <div class="sheet-overlay" style="z-index: 500;" data-action="prompt-cancel"></div>
+    <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 280px; background: #fff; border-radius: 16px; padding: 24px; z-index: 501; box-shadow: 0 4px 20px rgba(0,0,0,0.15); display: flex; flex-direction: column; align-items: center;">
       <div style="font-size: 18px; font-weight: 700; margin-bottom: 24px; color: #000;">플레이리스트명</div>
       <input type="text" id="prompt-input" placeholder="${dateStr}" style="width: 100%; height: 48px; background: #f8f8f8; border: none; border-radius: 8px; padding: 0 16px; font-size: 15px; color: #141414; box-sizing: border-box; margin-bottom: 24px; outline: none;" />
       <div style="display: flex; width: 100%;">
