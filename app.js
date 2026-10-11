@@ -183,6 +183,7 @@ const state = {
   queueShowSearch: false,
   queueSortLabel: "순서정렬",
   queueSortOrder: "default",
+  queuePassNotice: false,
   queueTracks: [],
   toastMessage: null,
   showLogin: false,
@@ -1428,7 +1429,7 @@ function getQueueTabTracks() {
     );
     return pl ? pl.tracks : [];
   }
-  if (state.queueTab === "fast") return tracks.slice(0, 6);
+  if (state.queueTab === "fast") return [];
   if (state.queueTab === "external") return state.externalTracks || [];
   if (state.queueTab === "hires") return tracks.slice(2, 7);
   return state.queueTracks;
@@ -1582,7 +1583,7 @@ function queueScreen() {
           : ""
       }
       ${
-        state.queueTab === "my" && !state.queueMyPlaylistId
+        (state.queueTab === "my" && !state.queueMyPlaylistId) || state.queueTab === "fast"
           ? ""
           : `
       <div class="queue-ctrl-row">
@@ -1620,7 +1621,11 @@ function queueScreen() {
       }
 
       <div class="queue-song-list">
-        ${queueSongListInner(listTracks)}
+        ${
+          state.queueTab === "fast"
+            ? `<p class="queue-pass-notice">이용권 사용자에게만 제공되는 기능입니다.</p>`
+            : queueSongListInner(listTracks)
+        }
       </div>
 
       ${
@@ -1651,7 +1656,18 @@ function queueScreen() {
         </div>
       `
       }
-    </div> `;
+    </div>
+    ${
+      state.queuePassNotice
+        ? `<div class="queue-pass-popup" role="dialog" aria-modal="true">
+            <button type="button" class="queue-pass-popup-back" data-action="close-queue-pass" aria-label="닫기"></button>
+            <div class="queue-pass-popup-card" data-stop>
+              <p>이용권 사용자에게만 제공되는 기능입니다.</p>
+              <button type="button" data-action="close-queue-pass">확인</button>
+            </div>
+          </div>`
+        : ""
+    }`;
 }
 
 function addSongScreen() {
@@ -3151,6 +3167,7 @@ app.addEventListener("click", (event) => {
     state.queueEdit = false;
     state.selectedQueueIds = [];
     state.queueMyPlaylistId = null;
+    state.queuePassNotice = false;
     return render();
   } else if (action === "queue-my-open-sheet") {
     state.sheet = "queue-my-playlist-select";
@@ -3210,6 +3227,7 @@ app.addEventListener("click", (event) => {
     state.queueEdit = false;
     state.selectedQueueIds = [];
     state.queueVisibleCount = 30;
+    state.queuePassNotice = false;
     return render();
   } else if (action === "go-audio-tab") {
     state.showQueue = false;
@@ -3423,8 +3441,11 @@ app.addEventListener("click", (event) => {
     state.sheet = "save-to-playlist";
     return render();
   } else if (action === "queue-zap") {
-    alert("이용권 사용자에게만 제공되는 기능입니다.");
-    return;
+    state.queuePassNotice = true;
+    return render();
+  } else if (action === "close-queue-pass") {
+    state.queuePassNotice = false;
+    return render();
   }
 
   // --- 내음악 & 플레이리스트 액션 ---
